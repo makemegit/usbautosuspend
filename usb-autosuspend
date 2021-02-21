@@ -1,0 +1,64 @@
+#!/bin/bash
+# bash script for switching USB atosuspend ON or OFF.
+# This will help you charge your phone.
+# by makeme v.2021_02_21
+#
+echo "This script enable or disable USB Auto-Suspend for ALL usb devices!!!"
+echo ""
+USBautosuspendON ()
+{
+  echo "Setting USB autosuspend ON..."
+  sudo modprobe usbcore autosuspend=-1
+  sudo echo "-1" | sudo tee /sys/module/usbcore/parameters/autosuspend > /dev/null
+  echo "done"
+}
+USBautosuspendOFF ()
+{
+  echo Setting USB autosuspend OFF...
+  sudo modprobe usbcore autosuspend=2
+  sudo echo "2" | sudo tee /sys/module/usbcore/parameters/autosuspend > /dev/null
+  echo done
+}
+USBautosuspendSTATUS ()
+{
+  cat /sys/module/usbcore/parameters/autosuspend
+}
+if [[ "$1" =~ on|ON ]]; then
+  USBautosuspendON
+elif [[ "$1" =~ off|OFF ]]; then
+  USBautosuspendOFF
+elif [[ "$1" =~ help|h|-help|--help ]]; then
+  echo "Help Options:"
+  echo "help|h|-help|--help"
+  echo "on|ON"
+  echo "off|OFF"
+elif [ "$1" == status ]; then
+  USBautosuspendSTATUS
+else
+  echo "Options:"
+  PS3='Please enter your choice: '
+  options=("Enable" "Disable" "Status" "Quit")
+  select opt in "${options[@]}"
+  do
+    case $opt in
+        "Enable")
+            echo ""
+            USBautosuspendON
+            break
+            ;;
+        "Disable")
+            echo ""
+            USBautosuspendOFF
+            break
+            ;;
+        "Status")
+            echo ""
+            USBautosuspendSTATUS
+            ;;
+        "Quit")
+            break
+            ;;
+        *) echo "invalid option $REPLY";;
+    esac
+done
+fi
