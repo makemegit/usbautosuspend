@@ -8,15 +8,15 @@ echo ""
 USBautosuspendON ()
 {
   echo "Setting USB autosuspend ON..."
-  sudo modprobe usbcore autosuspend=-1
-  sudo echo "-1" | sudo tee /sys/module/usbcore/parameters/autosuspend > /dev/null
+  sudo modprobe usbcore autosuspend=2
+  sudo echo "2" | sudo tee /sys/module/usbcore/parameters/autosuspend > /dev/null
   echo "done"
 }
 USBautosuspendOFF ()
 {
   echo Setting USB autosuspend OFF...
-  sudo modprobe usbcore autosuspend=2
-  sudo echo "2" | sudo tee /sys/module/usbcore/parameters/autosuspend > /dev/null
+  sudo modprobe usbcore autosuspend=-1
+  sudo echo "-1" | sudo tee /sys/module/usbcore/parameters/autosuspend > /dev/null
   echo done
 }
 USBautosuspendSTATUS ()
